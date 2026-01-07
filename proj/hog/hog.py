@@ -45,6 +45,10 @@ def boar_brawl(player_score, opponent_score):
     """
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    player_ones = player_score % 10
+    opponent_tens = (opponent_score // 10) % 10
+    tmp = abs(player_ones - opponent_tens) * 3
+    return max(1, tmp)
     # END PROBLEM 2
 
 
