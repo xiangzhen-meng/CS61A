@@ -98,6 +98,13 @@ def num_factors(n):
     """Return the number of factors of N, including 1 and N itself."""
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    counter = 1
+    i = n // 2
+    while i >= 1:
+        if n % i == 0:
+            counter = counter + 1
+        i = i - 1
+    return counter
     # END PROBLEM 4
 
 
@@ -105,6 +112,14 @@ def sus_points(score):
     """Return the new score of a player taking into account the Sus Fuss rule."""
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    if num_factors(score) == 3 or num_factors(score) == 4:
+        i = score + 1
+        while True:
+            if is_prime(i):
+                return i
+            i = i + 1
+    else:
+        return score
     # END PROBLEM 4
 
 
@@ -114,6 +129,9 @@ def sus_update(num_rolls, player_score, opponent_score, dice=six_sided):
     """
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    cur = take_turn(num_rolls, player_score, opponent_score, dice)
+    player_score = player_score + cur
+    return sus_points(player_score)
     # END PROBLEM 4
 
 
