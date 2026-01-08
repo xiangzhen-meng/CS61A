@@ -262,6 +262,12 @@ def make_averaged(original_function, times_called=1000):
 
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    def f(*args):
+        total, i = 0, 0
+        while i < times_called:
+            total, i = total + original_function(*args), i + 1
+        return total / times_called
+    return f
     # END PROBLEM 8
 
 
@@ -275,6 +281,13 @@ def max_scoring_num_rolls(dice=six_sided, times_called=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    max_score, max_dice_num = 0, 0
+    for dice_num in range(1, 10 + 1):
+        tmp_score = make_averaged(roll_dice, times_called)(dice_num, dice)
+        if tmp_score > max_score:
+            max_score = tmp_score
+            max_dice_num = dice_num
+    return max_dice_num
     # END PROBLEM 9
 
 
