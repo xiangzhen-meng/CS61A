@@ -202,6 +202,9 @@ def always_roll(n):
 
     # BEGIN PROBLEM 6
     "*** YOUR CODE HERE ***"
+    def tmp(score, opposcore):
+        return n
+    return tmp
     # END PROBLEM 6
 
 
@@ -234,6 +237,14 @@ def is_always_roll(strategy, goal=GOAL):
     """
     # BEGIN PROBLEM 7
     "*** YOUR CODE HERE ***"
+    pre = cur = strategy(0, 0)
+    for i in range(0, goal):
+        for j in range(0, goal):
+            pre = cur
+            cur = strategy(i, j)
+            if pre != cur:
+                return False
+    return True
     # END PROBLEM 7
 
 
