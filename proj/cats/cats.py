@@ -38,6 +38,11 @@ def pick(paragraphs: list[str], select, k: int) -> str:
     """
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    legal = [x for x in paragraphs if select(x)]
+    if k < len(legal):
+        return legal[k]
+    else:
+        return ""
     # END PROBLEM 1
 
 
@@ -58,6 +63,19 @@ def about(keywords: list[str]):
 
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    def about_sth(paragraph: str):
+        paragraph = lower(paragraph)
+        lower_keywords = []
+        for word in keywords:
+            lower_keywords += [lower(word)]
+        paragraph = remove_punctuation(paragraph)
+        words_in_para = split(paragraph)
+
+        for word in lower_keywords:
+            if word in words_in_para:
+                return True
+        return False
+    return about_sth
     # END PROBLEM 2
 
 
@@ -88,6 +106,27 @@ def accuracy(typed: str, source: str) -> float:
     source_words = split(source)
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    typed_len = len(typed_words)
+    source_len = len(source_words)
+    iter_len, error_len = 0, 0
+
+    if typed_len == 0 and source_len == 0:
+        return 100.0
+    elif typed_len == 0 or source_len == 0:
+        return 0.0
+    
+    if typed_len < source_len:
+        iter_len = typed_len
+    elif typed_len > source_len:
+        error_len = typed_len - source_len
+        iter_len = source_len
+    else:
+        iter_len = typed_len
+    
+    for i in range(iter_len):
+        if typed_words[i] != source_words[i]:
+            error_len += 1
+    return 100.0 - error_len / typed_len * 100.0
     # END PROBLEM 3
 
 
@@ -106,6 +145,10 @@ def wpm(typed: str, elapsed: int) -> float:
     assert elapsed > 0, "Elapsed time must be positive"
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    # remove_punction???
+    words_cnt = len(typed) / 5
+    min_cnt = elapsed / 60
+    return words_cnt / min_cnt
     # END PROBLEM 4
 
 
