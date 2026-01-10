@@ -210,6 +210,16 @@ def autocorrect(typed_word: str, word_list: list[str], diff_function, limit: int
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    if typed_word in word_list:
+        return typed_word
+    def cur_diff_fun(source_word):
+        return diff_function(typed_word, source_word, limit)
+    word_min = min(word_list, key=cur_diff_fun)
+    diff_min = diff_function(typed_word, word_min, limit)
+    if diff_min > limit:
+        return typed_word
+    else:
+        return word_min
     # END PROBLEM 5
 
 
@@ -236,7 +246,17 @@ def furry_fixes(typed: str, source: str, limit: int) -> int:
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    def sub_cnt(word1, word2, cnt):
+        if cnt > limit:
+            return cnt
+        if len(word1) == 0 or len(word2) == 0:
+            return max(len(word1), len(word2)) + cnt
+        
+        if word1[0] == word2[0]:
+            return sub_cnt(word1[1:], word2[1:], cnt)
+        else:
+            return sub_cnt(word1[1:], word2[1:], cnt + 1)
+    return sub_cnt(typed, source, 0)
     # END PROBLEM 6
 
 
@@ -257,23 +277,20 @@ def minimum_mewtations(typed: str, source: str, limit: int) -> int:
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________: # Base cases should go here, you may add more base cases as needed.
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    # Recursive cases should go below here
-    if ___________: # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    else:
-        add = ... # Fill in these lines
-        remove = ...
-        substitute = ...
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+    def mew_cnt(word1, word2, cnt):
+        # baseline
+        if cnt > limit:
+            return cnt
+        if len(word1) == 0 or len(word2) == 0:
+            return cnt + max(len(word1), len(word2))
+        # recursive
+        if word1[0] == word2[0]:
+            return mew_cnt(word1[1:], word2[1:], cnt)
+        sub = mew_cnt(word1[1:], word2[1:], cnt + 1)
+        del1 = mew_cnt(word1, word2[1:], cnt + 1)
+        del2 = mew_cnt(word1[1:], word2, cnt + 1)
+        return min(sub, del1, del2)
+    return mew_cnt(typed, source, 0)
 
 
 # Ignore the line below
