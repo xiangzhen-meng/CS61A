@@ -336,6 +336,17 @@ def report_progress(typed: list[str], source: list[str], user_id: int, upload) -
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    # calculate ratio of progress
+    len_source = len(source)
+    progress = 0
+    for i in range(len(typed)):
+        if typed[i] == source[i]:
+            progress += 1
+        else:
+            break
+    ratio = progress / len_source
+    upload({'id': user_id, 'progress': ratio})
+    return ratio
     # END PROBLEM 8
 
 
@@ -359,7 +370,9 @@ def time_per_word(words: list[str], timestamps_per_player: list[list[int]]) -> d
     """
     tpp = timestamps_per_player  # A shorter name (for convenience)
     # BEGIN PROBLEM 9
-    times = []  # You may remove this line
+    times = []
+    for timestamps in tpp:
+        times += [[timestamps[i] - timestamps[i-1] for i in range(1, len(timestamps))]]
     # END PROBLEM 9
     return {'words': words, 'times': times}
 
@@ -388,6 +401,16 @@ def fastest_words(words_and_times: dict) -> list[list[str]]:
     word_indices = range(len(words))    # contains an *index* for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    fastest_player_per_word = []
+    for word_i in word_indices:
+        times_for_word = [get_time(times, player_i, word_i) for player_i in player_indices]
+        fastest_player = min(player_indices, key=lambda p: times_for_word[p])
+        fastest_player_per_word.append(fastest_player)
+    result = []
+    for player_i in player_indices:
+        player_words = [words[word_i] for word_i in word_indices if fastest_player_per_word[word_i] == player_i]
+        result.append(player_words)
+    return result
     # END PROBLEM 10
 
 
