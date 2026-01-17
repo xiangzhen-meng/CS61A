@@ -30,6 +30,7 @@ def do_define_form(expressions, env):
     >>> scheme_eval(read_line("(f 3)"), env)
     5
     """
+    assert isinstance(env, Frame)
     validate_form(expressions, 2) # Checks that expressions is a list of length at least 2
     signature = expressions.first
     if scheme_symbolp(signature):
@@ -45,6 +46,15 @@ def do_define_form(expressions, env):
         # defining a named procedure e.g. (define (f x y) (+ x y))
         # BEGIN PROBLEM 10
         "*** YOUR CODE HERE ***"
+        # transform into a regular lambda form
+        name = signature.first
+        formals = signature.rest
+        body = expressions.rest
+        lambda_exp = Pair(formals, body)
+        lambda_procedure = do_lambda_form(lambda_exp, env)
+        # bind the name to the procedure
+        Frame.define(env, name, lambda_procedure)
+        return name
         # END PROBLEM 10
     else:
         bad_signature = signature.first if isinstance(signature, Pair) else signature
@@ -87,6 +97,8 @@ def do_lambda_form(expressions, env):
     validate_formals(formals)
     # BEGIN PROBLEM 7
     "*** YOUR CODE HERE ***"
+    body = expressions.rest
+    return LambdaProcedure(formals, body, env)
     # END PROBLEM 7
 
 def do_if_form(expressions, env):
@@ -224,6 +236,8 @@ def do_mu_form(expressions, env):
     validate_formals(formals)
     # BEGIN PROBLEM 11
     "*** YOUR CODE HERE ***"
+    body = expressions.rest
+    return MuProcedure(formals, body)
     # END PROBLEM 11
 
 

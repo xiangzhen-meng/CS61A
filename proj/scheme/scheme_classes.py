@@ -58,6 +58,14 @@ class Frame:
             raise SchemeError('Incorrect number of arguments to function call')
         # BEGIN PROBLEM 8
         "*** YOUR CODE HERE ***"
+        child = Frame(self)
+        def bind(cur_formals, cur_vals, env):
+            if cur_formals == nil or cur_vals == nil:
+                return
+            Frame.define(env, cur_formals.first, cur_vals.first)
+            bind(cur_formals.rest, cur_vals.rest, env)
+        bind(formals, vals, child)
+        return child
         # END PROBLEM 8
 
 ##############
