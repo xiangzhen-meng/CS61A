@@ -131,7 +131,20 @@ def do_and_form(expressions, env):
     False
     """
     # BEGIN PROBLEM 12
+    # default: #t
     "*** YOUR CODE HERE ***"
+    init = Pair(True, expressions)
+    def cal(head):
+        cur = scheme_eval(head.first, env)
+        # base case
+        if is_scheme_false(cur):
+            return False
+        if head.rest == nil:
+            return cur
+        # recursive
+        else:
+            return cal(head.rest)
+    return cal(init)
     # END PROBLEM 12
 
 def do_or_form(expressions, env):
@@ -149,7 +162,20 @@ def do_or_form(expressions, env):
     6
     """
     # BEGIN PROBLEM 12
+    # default: #f
     "*** YOUR CODE HERE ***"
+    init = Pair(False, expressions)
+    def cal(head):
+        cur = scheme_eval(head.first, env)
+        # base case
+        if is_scheme_true(cur):
+            return cur
+        if head.rest == nil:
+            return cur
+        # recursive
+        else:
+            return cal(head.rest)
+    return cal(init)
     # END PROBLEM 12
 
 def do_cond_form(expressions, env):
@@ -170,6 +196,10 @@ def do_cond_form(expressions, env):
         if is_scheme_true(test):
             # BEGIN PROBLEM 13
             "*** YOUR CODE HERE ***"
+            subexp = clause.rest
+            if subexp == nil:
+                return test
+            return eval_all(subexp, env)
             # END PROBLEM 13
         expressions = expressions.rest
 
@@ -194,6 +224,22 @@ def make_let_frame(bindings, env):
     names = vals = nil
     # BEGIN PROBLEM 14
     "*** YOUR CODE HERE ***"
+    assert isinstance(env, Frame)
+    # validate the bindings as Pair(A, Pair(B, nil))
+    cur = bindings
+    while cur != nil:
+        validate_form(cur.first, 2, 2)
+        cur = cur.rest
+    # selectors for symbol and exp
+    cur = bindings
+    while cur != nil:
+        cur_name = cur.first.first
+        cur_val = scheme_eval(cur.first.rest.first, env)
+        names = Pair(cur_name, names)
+        vals = Pair(cur_val, vals)
+        cur = cur.rest
+    # no duplicate
+    validate_formals(names)
     # END PROBLEM 14
     return env.make_child_frame(names, vals)
 
